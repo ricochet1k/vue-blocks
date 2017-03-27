@@ -1,0 +1,32 @@
+<template>
+  <statement>
+    <div class="block-text-inline">
+      <span>turn left by</span>
+      <expression-hole v-model="data.value" />
+      <span>degrees</span>
+    </div>
+  </statement>
+</template>
+
+<script>
+import Statement from '../components/Statement';
+import ExpressionHole from '../components/ExpressionHole';
+
+export default {
+  name: 'turnleft',
+  props: ['data'],
+  data() {
+    return {
+    };
+  },
+  components: {
+    Statement,
+    ExpressionHole,
+  },
+};
+</script>
+
+<!-- Add "scoped" attribute to limit CSS to this component only -->
+<style>
+
+</style>
