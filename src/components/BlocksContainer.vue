@@ -48,25 +48,34 @@ class MyModelManager extends ModelManager {
     super(opts)
   }
 
-  // createModel() {
-  //   return new ImmutableList()
-  // }
+  createModel() {
+    console.log("createModel");
+    return []; //new ImmutableList()
+  }
+
+  createFor(opts) {
+    console.log('createFor', opts);
+    return new MyModelManager(opts);
+  }
 
   removeAt(index) {
-    console.log("removeAt", index, this);
+    console.log("removeAt", index);
     super.removeAt(index);
   }
 
-  // insertAt(index, item) {
-  //   //...
-  // }
+  insertAt(index, item) {
+    console.log("insertAt", index, item);
+    super.insertAt(index, item);
+  }
 
-  // move({dragIndex, dropIndex})
-  //   //...
-  // }
+  move({dragIndex, dropIndex}) {
+    console.log("move", dragIndex, dropIndex);
+    super.move({dragIndex, dropIndex});
+  }
 }
 
 function createModelManager(opts) {
+  console.log('createModelManager', opts)
   return new MyModelManager(opts)
 }
 
@@ -182,7 +191,7 @@ export default {
           el.classList.remove('ex-over');
         },
         remove: (e) => {
-          console.log('remove', e);
+          console.log('remove', e, new Error());
         }
       })
 
@@ -245,7 +254,7 @@ export default {
 
 .gu-hide {
   display: block;
-  
+
 }
 
 .abs-object {
