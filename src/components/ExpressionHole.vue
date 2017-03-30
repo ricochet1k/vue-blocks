@@ -58,7 +58,7 @@ export default {
 
 <!-- Add "scoped" attribute to limit CSS to this component only -->
 <style>
-.expression-hole:empty {
+.expression-hole:empty, .expression-hole.dragging {
   min-height: 1em;
   min-width: 20px;
 }

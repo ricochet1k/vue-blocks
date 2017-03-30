@@ -157,6 +157,7 @@ export default {
           main: {
             direction: 'horizontal',
             removeOnSpill: true,
+            // copy: false,
             moves: (el, target, source, sibling) => {
               // console.log('moves', el, target, source, sibling);
               return true;
@@ -176,22 +177,40 @@ export default {
       });
 
       this.expressionService.on({
-        drag: ({ el, container, service, drake }) => {
+        drag: (e) => {
+          let { el, container, service, drake } = e;
           el.classList.remove('ex-moved');
+          console.log('drag', e);
         },
         drop: (e) => {
           let { el, container } = e;
           el.classList.add('ex-moved');
-          // console.log('drop', e, el, container);
+          console.log('drop', e);
         },
-        over: ({ el, container }) => {
+        over: (e) => {
+          let { el, container } = e;
           el.classList.add('ex-over');
+          console.log('over', e);
         },
-        out: ({ el, container }) => {
+        out: (e) => {
+          let { el, container } = e;
           el.classList.remove('ex-over');
+          console.log('drop', e);
+        },
+        cancel: (e) => {
+          console.log('cancel', e);
+        },
+        dragend: (e) => {
+          console.log('dragend', e);
+        },
+        shadow: (e) => {
+          console.log('shadow', e);
+        },
+        cloned: (e) => {
+          console.log('cloned', e);
         },
         remove: (e) => {
-          console.log('remove', e, new Error());
+          console.log('remove', e);
         }
       })
 
