@@ -6,7 +6,7 @@
 
 <script>
 export default {
-  name: 'block',
+  name: 'statement',
   data() {
     return {
     };

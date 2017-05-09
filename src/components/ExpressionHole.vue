@@ -1,16 +1,23 @@
 <template>
   <div class="expression-hole"
+    :class="{empty: dragArray.length === 0}"
     v-dragula="dragArray" 
-    service="vue-blocks-expressions"
-    drake="main"
+    bag="vue-blocks-expressions"
+    @dragdrop="dragdrop($event)"
   >
-    <component v-for="item in dragArray" :is="expressionComponent(item)" :data="item" />
+    <component 
+      v-for="item in dragArray" 
+      :is="expressionComponent(item)" 
+      :data="item" 
+      :key="keyFor(item)"
+      />
   </div>
 </template>
 
 <script>
 import Vue from 'vue';
 // import { DragHandler } from 'vue2-dragula';
+import BlockMixin from '../components/BlockMixin';
 import { expressions } from '../components/Expression';
 
 // class MyDragHandler extends DragHandler {
@@ -23,6 +30,7 @@ import { expressions } from '../components/Expression';
 
 export default {
   name: 'expression-hole',
+  mixins: [BlockMixin],
   props: ['value'],
   data() {
     let dragArray = [];
@@ -46,6 +54,10 @@ export default {
     },
   },
   methods: {
+    dragdrop(event) {
+      console.log('DRAGDROP!', event);
+      this.$emit('input', event.model[0]);
+    },
     expressionComponent(item) {
       if (!item) return null;
 

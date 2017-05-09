@@ -1,8 +1,7 @@
 <template>
   <div class="toplevelblock"
     v-dragula="dragArray" 
-    :service="service"
-    :drake="drake"
+    :bag="bag"
   >
     <component v-for="item in dragArray" :is="component" :data="item" />
   </div>
@@ -14,7 +13,7 @@ import { expressions } from '../components/Expression';
 
 export default {
   name: 'top-level-block',
-  props: ['data', 'service', 'drake', 'component'],
+  props: ['data', 'bag', 'component'],
   data() {
     let dragArray = [];
     if (this.data) {

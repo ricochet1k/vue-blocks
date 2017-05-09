@@ -1,30 +1,27 @@
 <template>
   <div class="blockscontainer">
     <top-level-block class="abs-object" 
-      v-for="(block, index) in data.blocks" 
-      :style="{left: block.x+'px', top: block.y+'px'}"
-      service="vue-blocks-blocks"
-      drake="main"
-      :component="blockComponent(block.block)"
-      :data="block.block"
+      v-for="(blk, index) in data.blocks" 
+      :style="{left: blk.x+'px', top: blk.y+'px'}"
+      bag="vue-blocks-blocks"
+      :component="blockComponent(blk.block)"
+      :data="blk.block"
       @input="onDraggedOut(data.blocks, index)" />
     
     <top-level-block class="abs-object" 
-      v-for="(expression, index) in data.expressions" 
-      :style="{left: expression.x+'px', top: expression.y+'px'}"
-      service="vue-blocks-expressions" 
-      drake="main"
-      :component="expressionComponent(expression.expression)"
-      :data="expression.expression"
+      v-for="(exp, index) in data.expressions" 
+      :style="{left: exp.x+'px', top: exp.y+'px'}"
+      bag="vue-blocks-expressions" 
+      :component="expressionComponent(exp.expression)"
+      :data="exp.expression"
       @input="onDraggedOut(data.expressions, index)" />
     
     <top-level-block class="abs-object" 
-      v-for="(statement, index) in data.statements" 
-      :style="{left: statement.x+'px', top: statement.y+'px'}"
-      service="vue-blocks-statements" 
-      drake="main"
-      :component="statementComponent(statement.statement)"
-      :data="statement.statement"
+      v-for="(stmt, index) in data.statements" 
+      :style="{left: stmt.x+'px', top: stmt.y+'px'}"
+      bag="vue-blocks-statements" 
+      :component="statementComponent(stmt.statement)"
+      :data="stmt.statement"
       @input="onDraggedOut(data.statements, index)" />
   </div>
 </template>
@@ -41,43 +38,43 @@ import TopLevelBlock from '../components/TopLevelBlock';
 
 // var dragArraySym = Symbol('dragArraySym');
 
-import { ModelManager } from 'vue2-dragula'
+// import { ModelManager } from 'vue2-dragula'
 
-class MyModelManager extends ModelManager {
-  constructor(opts) {
-    super(opts)
-  }
+// class MyModelManager extends ModelManager {
+//   constructor(opts) {
+//     super(opts)
+//   }
 
-  createModel() {
-    console.log("createModel");
-    return []; //new ImmutableList()
-  }
+//   createModel() {
+//     console.log("createModel");
+//     return []; //new ImmutableList()
+//   }
 
-  createFor(opts) {
-    console.log('createFor', opts);
-    return new MyModelManager(opts);
-  }
+//   createFor(opts) {
+//     console.log('createFor', opts);
+//     return new MyModelManager(opts);
+//   }
 
-  removeAt(index) {
-    console.log("removeAt", index);
-    super.removeAt(index);
-  }
+//   removeAt(index) {
+//     console.log("removeAt", index);
+//     super.removeAt(index);
+//   }
 
-  insertAt(index, item) {
-    console.log("insertAt", index, item);
-    super.insertAt(index, item);
-  }
+//   insertAt(index, item) {
+//     console.log("insertAt", index, item);
+//     super.insertAt(index, item);
+//   }
 
-  move({dragIndex, dropIndex}) {
-    console.log("move", dragIndex, dropIndex);
-    super.move({dragIndex, dropIndex});
-  }
-}
+//   move({dragIndex, dropIndex}) {
+//     console.log("move", dragIndex, dropIndex);
+//     super.move({dragIndex, dropIndex});
+//   }
+// }
 
-function createModelManager(opts) {
-  console.log('createModelManager', opts)
-  return new MyModelManager(opts)
-}
+// function createModelManager(opts) {
+//   console.log('createModelManager', opts)
+//   return new MyModelManager(opts)
+// }
 
 export default {
   name: 'blockscontainer',
@@ -108,133 +105,143 @@ export default {
       console.log('onDraggedOut', container, index);
       container.splice(index, 1);
     },
+
+    updateModel (dropTarget, dropSource) {
+      dropSource.vm[dropSource.expression] = dropSource.model
+      if (dropTarget.el === dropSource.el) { return }
+      dropTarget.vm[dropTarget.expression] = dropTarget.model
+    },
+
     init() {
-      this.blockService = Vue.$dragula.createService({
-        name: 'vue-blocks-blocks',
-        // createDragHandler,
-        drakes: {
-          main: {
-            moves: (el, target, source, sibling) => {
-              // console.log('moves', el, target, source, sibling);
-              return true;
-            },
-            accepts: (el, target, source, sibling) => {
-              // console.log('accepts', el, target, source, sibling);
-              // return target.children.length === 0;
-            },
-            invalid: (el, handle) => {
-              // console.log('block invalid', el, handle);
-              if (el.classList.contains('expression') || el.classList.contains('statement'))
-                return true;
-              return false;
-            },
-          },
+      console.log('vueDragula', Vue.dragula);
+      let vD = this.$dragula;
+
+
+      this.$dragula.eventBus.$on('drop-model',
+        (bagName, el, dropTarget, dropSource, dropIndex) => {
+          console.log('dropModel: ', bagName, el, dropTarget, dropSource, dropIndex)
+          // this.updateModel(dropTarget, dropSource)
+        }
+      )
+
+      vD.options('vue-blocks-blocks', {
+        moves: (el, target, source, sibling) => {
+          // console.log('moves', el, target, source, sibling);
+          return true;
+        },
+        accepts: (el, target, source, sibling) => {
+          // console.log('accepts', el, target, source, sibling);
+          // return target.children.length === 0;
+        },
+        invalid: (el, handle) => {
+          let ret = false;
+          if (el.classList.contains('expression') || el.classList.contains('statement'))
+            ret = true;
+          else
+            ret = false;
+
+          console.log('block invalid', ret, el, handle);
+          return ret;
         },
       });
 
-      this.blockService.on({
+      this.blockBag = vD.getDrake('vue-blocks-blocks');
+
+      this.blockBag.on({
         drag: ({ el, container, service, drake }) => {
-          el.classList.remove('ex-moved');
+          // el.classList.remove('ex-moved');
         },
         drop: (e) => {
           let { el, container } = e;
-          el.classList.add('ex-moved');
+          // el.classList.add('ex-moved');
           // console.log('drop', e, el, container);
         },
         over: ({ el, container }) => {
-          el.classList.add('ex-over');
+          // el.classList.add('ex-over');
         },
         out: ({ el, container }) => {
-          el.classList.remove('ex-over');
+          // el.classList.remove('ex-over');
         },
       })
 
-      this.expressionService = Vue.$dragula.createService({
-        name: 'vue-blocks-expressions',
-        // createDragHandler,
-        createModelManager,
-        drakes: {
-          main: {
-            direction: 'horizontal',
-            removeOnSpill: true,
-            // copy: false,
-            moves: (el, target, source, sibling) => {
-              // console.log('moves', el, target, source, sibling);
-              return true;
-            },
-            accepts: (el, target, source, sibling) => {
-              // console.log('accepts', el, target, source, sibling);
-              return target.children.length === 0;
-            },
-            invalid: (el, handle) => {
-              // console.log('invalid', el, handle);
-              // if (el.classList.contains('expression'))
-              //   return true;
-              return false;
-            },
-          },
+      vD.options('vue-blocks-expressions', {
+        direction: 'vertical',
+        removeOnSpill: true,
+        // copy: false,
+        moves: (el, target, source, sibling) => {
+          // console.log('moves', el, target, source, sibling);
+          return true;
+        },
+        accepts: (el, target, source, sibling) => {
+          // console.log('accepts', el, target.children.length, target, source, sibling);
+          // return target.children.length < 2;
+          return target.classList.contains('empty');
+          // return true;
+        },
+        invalid: (el, handle) => {
+          // console.log('invalid', el, handle);
+          // if (el.classList.contains('expression'))
+          //   return true;
+          return false;
         },
       });
 
-      this.expressionService.on({
-        drag: (e) => {
-          let { el, container, service, drake } = e;
-          el.classList.remove('ex-moved');
-          console.log('drag', e);
-        },
-        drop: (e) => {
-          let { el, container } = e;
-          el.classList.add('ex-moved');
-          console.log('drop', e);
-        },
-        over: (e) => {
-          let { el, container } = e;
-          el.classList.add('ex-over');
-          console.log('over', e);
-        },
-        out: (e) => {
-          let { el, container } = e;
-          el.classList.remove('ex-over');
-          console.log('drop', e);
-        },
-        cancel: (e) => {
-          console.log('cancel', e);
-        },
-        dragend: (e) => {
-          console.log('dragend', e);
-        },
-        shadow: (e) => {
-          console.log('shadow', e);
-        },
-        cloned: (e) => {
-          console.log('cloned', e);
-        },
-        remove: (e) => {
-          console.log('remove', e);
-        }
+      this.expressionBag = vD.getDrake('vue-blocks-expressions');
+
+      this.expressionBag.on('drag', (e) => {
+        let { el, container, service, drake } = e;
+        // el.classList.remove('ex-moved');
+        console.log('drag', e);
+      })
+      this.expressionBag.on('drop', (e) => {
+        let { el, container } = e;
+        // el.classList.add('ex-moved');
+        console.log('drop', e);
+      })
+      this.expressionBag.on('over', (e) => {
+        let { el, container } = e;
+        // el.classList.add('ex-over');
+        console.log('over', e);
+      })
+      this.expressionBag.on('out', (e) => {
+        let { el, container } = e;
+        // el.classList.remove('ex-over');
+        console.log('out', e);
+      })
+      this.expressionBag.on('cancel', (e) => {
+        console.log('cancel', e);
+      })
+      this.expressionBag.on('dragend', (e) => {
+        console.log('dragend', e);
+      })
+      this.expressionBag.on('shadow', function (e) {
+        console.log('shadow', arguments);
+      })
+      this.expressionBag.on('cloned', (e) => {
+        console.log('cloned', e);
+      })
+      this.expressionBag.on('remove', (e) => {
+        console.log('remove', e);
       })
 
-      this.statementService = Vue.$dragula.createService({
-        name: 'vue-blocks-statements',
-        drakes: {
-          main: {
-            moves: (el, target, source, sibling) => {
-              // console.log('moves', el, target, source, sibling);
-              return true;
-            },
-            accepts: (el, target, source, sibling) => {
-              // console.log('accepts', el, target, source, sibling);
-              return true;
-            },
-            invalid: (el, handle) => {
-              // console.log('invalid', el, handle);
-              if (el.classList.contains('expression'))
-                return true;
-              return false;
-            },
-          },
+      vD.options('vue-blocks-statements', {
+        moves: (el, target, source, sibling) => {
+          // console.log('moves', el, target, source, sibling);
+          return true;
+        },
+        accepts: (el, target, source, sibling) => {
+          // console.log('accepts', el, target, source, sibling);
+          return true;
+        },
+        invalid: (el, handle) => {
+          // console.log('invalid', el, handle);
+          if (el.classList.contains('expression'))
+            return true;
+          return false;
         },
       });
+
+      this.statementBag = vD.getDrake('vue-blocks-statements');
 
       // this.statementService.on({
       //   drag: ({ el, container, service, drake }) => {

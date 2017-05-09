@@ -3,11 +3,12 @@
     <div class="top-border"></div>
     <div class="stmts-list"
     v-dragula="value" 
-    service="vue-blocks-statements"
-    drake="main">
+    bag="vue-blocks-statements"
+    @dragdrop="dragdrop($event)">
       <component v-for="stmt in value" 
         :is="statementComponent(stmt)" 
-        :data="stmt" 
+        :data="stmt"
+        :key="keyFor(stmt)"
       />
     </div>
     <div class="bottom-border"></div>
@@ -16,16 +17,22 @@
 
 <script>
 import Vue from 'vue';
+import BlockMixin from '../components/BlockMixin';
 import { statements } from '../components/Statement';
 
 export default {
   name: 'expression-hole',
+  mixins: [BlockMixin],
   props: ['value'],
   data() {
     return {
     };
   },
   methods: {
+    dragdrop(event) {
+      console.log('stmt DRAGDROP', event);
+      this.$emit('input', event.model);
+    },
     statementComponent(stmt) {
       if (!stmt) return null;
 
