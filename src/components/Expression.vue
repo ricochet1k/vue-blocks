@@ -26,7 +26,7 @@ export default {
 <!-- Add "scoped" attribute to limit CSS to this component only -->
 <style>
 .expression {
-  position: relative;
+  /*position: relative;*/
   padding-right: 7px;
   padding-left: 12px;
   background-color: #ddddaa;

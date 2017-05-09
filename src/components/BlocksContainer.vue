@@ -1,7 +1,8 @@
 <template>
-  <div class="blockscontainer">
+  <div class="blockscontainer" ref="container">
     <top-level-block class="abs-object" 
       v-for="(blk, index) in data.blocks" 
+      :key="keyFor(blk)"
       :style="{left: blk.x+'px', top: blk.y+'px'}"
       bag="vue-blocks-blocks"
       :component="blockComponent(blk.block)"
@@ -10,6 +11,7 @@
     
     <top-level-block class="abs-object" 
       v-for="(exp, index) in data.expressions" 
+      :key="keyFor(exp)"
       :style="{left: exp.x+'px', top: exp.y+'px'}"
       bag="vue-blocks-expressions" 
       :component="expressionComponent(exp.expression)"
@@ -18,6 +20,7 @@
     
     <top-level-block class="abs-object" 
       v-for="(stmt, index) in data.statements" 
+      :key="keyFor(stmt)"
       :style="{left: stmt.x+'px', top: stmt.y+'px'}"
       bag="vue-blocks-statements" 
       :component="statementComponent(stmt.statement)"
@@ -30,65 +33,23 @@
 import Vue from 'vue';
 
 import Block from '../components/Block';
+import BlockMixin from '../components/BlockMixin';
 import Expression from '../components/Expression';
 import Statement from '../components/Statement';
 import StatementsHole from '../components/StatementsHole';
 import ExpressionHole from '../components/ExpressionHole';
 import TopLevelBlock from '../components/TopLevelBlock';
 
-// var dragArraySym = Symbol('dragArraySym');
-
-// import { ModelManager } from 'vue2-dragula'
-
-// class MyModelManager extends ModelManager {
-//   constructor(opts) {
-//     super(opts)
-//   }
-
-//   createModel() {
-//     console.log("createModel");
-//     return []; //new ImmutableList()
-//   }
-
-//   createFor(opts) {
-//     console.log('createFor', opts);
-//     return new MyModelManager(opts);
-//   }
-
-//   removeAt(index) {
-//     console.log("removeAt", index);
-//     super.removeAt(index);
-//   }
-
-//   insertAt(index, item) {
-//     console.log("insertAt", index, item);
-//     super.insertAt(index, item);
-//   }
-
-//   move({dragIndex, dropIndex}) {
-//     console.log("move", dragIndex, dropIndex);
-//     super.move({dragIndex, dropIndex});
-//   }
-// }
-
-// function createModelManager(opts) {
-//   console.log('createModelManager', opts)
-//   return new MyModelManager(opts)
-// }
-
 export default {
   name: 'blockscontainer',
+  mixins: [BlockMixin],
   props: ['data'],
-  // data() {
-  //   return {
-  //   };
-  // },
   components: {
     StatementsHole,
     ExpressionHole,
     TopLevelBlock,
   },
-  created() {
+  mounted() {
     this.init();
   },
   methods: {
@@ -106,15 +67,14 @@ export default {
       container.splice(index, 1);
     },
 
-    updateModel (dropTarget, dropSource) {
-      dropSource.vm[dropSource.expression] = dropSource.model
-      if (dropTarget.el === dropSource.el) { return }
-      dropTarget.vm[dropTarget.expression] = dropTarget.model
-    },
-
     init() {
       console.log('vueDragula', Vue.dragula);
       let vD = this.$dragula;
+
+      let clone;
+      let removed;
+
+      console.log('init', this.$refs.container);
 
 
       this.$dragula.eventBus.$on('drop-model',
@@ -124,7 +84,16 @@ export default {
         }
       )
 
+      this.$dragula.eventBus.$on('remove-model',
+        (bagName, el, removeSource, removeIndex) => {
+          console.log('removeModel: ', bagName, el, removeSource, removeIndex)
+          // this.updateModel(dropTarget, dropSource)
+          removed = removeSource.removed;
+        }
+      )
+
       vD.options('vue-blocks-blocks', {
+        mirrorContainer: this.$refs.container,
         moves: (el, target, source, sibling) => {
           // console.log('moves', el, target, source, sibling);
           return true;
@@ -165,6 +134,7 @@ export default {
       })
 
       vD.options('vue-blocks-expressions', {
+        mirrorContainer: this.$refs.container,
         direction: 'vertical',
         removeOnSpill: true,
         // copy: false,
@@ -191,40 +161,48 @@ export default {
       this.expressionBag.on('drag', (e) => {
         let { el, container, service, drake } = e;
         // el.classList.remove('ex-moved');
-        console.log('drag', e);
+        // console.log('drag', e);
       })
       this.expressionBag.on('drop', (e) => {
         let { el, container } = e;
         // el.classList.add('ex-moved');
-        console.log('drop', e);
+        // console.log('drop', e);
       })
       this.expressionBag.on('over', (e) => {
         let { el, container } = e;
         // el.classList.add('ex-over');
-        console.log('over', e);
+        // console.log('over', e);
       })
       this.expressionBag.on('out', (e) => {
         let { el, container } = e;
         // el.classList.remove('ex-over');
-        console.log('out', e);
+        // console.log('out', e);
       })
       this.expressionBag.on('cancel', (e) => {
         console.log('cancel', e);
       })
       this.expressionBag.on('dragend', (e) => {
-        console.log('dragend', e);
+        // console.log('dragend', e);
       })
       this.expressionBag.on('shadow', function (e) {
-        console.log('shadow', arguments);
+        // console.log('shadow', arguments);
       })
       this.expressionBag.on('cloned', (e) => {
         console.log('cloned', e);
+        clone = e;
       })
       this.expressionBag.on('remove', (e) => {
-        console.log('remove', e);
+        let x = clone.style.left.slice(0, -2);
+        let y = clone.style.top.slice(0, -2);
+        // x and y are 'fixed' positions, so change them to be relative to the container
+        x -= this.$refs.container.offsetLeft;
+        y -= this.$refs.container.offsetTop;
+        console.log('remove', e, clone, x, y, removed);
+        this.data.expressions.push({x, y, expression: removed});
       })
 
       vD.options('vue-blocks-statements', {
+        mirrorContainer: this.$refs.container,
         moves: (el, target, source, sibling) => {
           // console.log('moves', el, target, source, sibling);
           return true;
@@ -270,6 +248,11 @@ export default {
   background-color: gray;
 }
 
+.blockscontainer .gu-mirror {
+  display: table;
+  box-sizing: border-box;
+}
+
 .objcontainer {
   /*position: absolute;*/
   /*left: 0;
@@ -280,7 +263,6 @@ export default {
 
 .gu-hide {
   display: block;
-
 }
 
 .abs-object {

@@ -1,4 +1,6 @@
 <template>
+  <!-- <div>
+    {{dragArray}} -->
   <div class="expression-hole"
     :class="{empty: dragArray.length === 0}"
     v-dragula="dragArray" 
@@ -12,6 +14,7 @@
       :key="keyFor(item)"
       />
   </div>
+<!-- </div> -->
 </template>
 
 <script>
@@ -49,8 +52,13 @@ export default {
     },
     value: function(val) {
       console.log("watch value", arguments)
-      if (val !== this.dragArray[0])
-        this.$set(this.dragArray, 0, val);
+      if (val !== this.dragArray[0]) {
+        let dragArray = [];
+        if (val) {
+          dragArray.push(val);
+        }
+        this.dragArray = dragArray;
+      }
     },
   },
   methods: {
