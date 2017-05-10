@@ -7,7 +7,7 @@
       bag="vue-blocks-blocks"
       :component="blockComponent(blk.block)"
       :data="blk.block"
-      @input="onDraggedOut(data.blocks, index)" />
+      @input="dragdrop(data.blocks, index, 'block', $event)" />
     
     <top-level-block class="abs-object" 
       v-for="(exp, index) in data.expressions" 
@@ -16,7 +16,7 @@
       bag="vue-blocks-expressions" 
       :component="expressionComponent(exp.expression)"
       :data="exp.expression"
-      @input="onDraggedOut(data.expressions, index)" />
+      @input="dragdrop(data.expressions, index, 'expression', $event)" />
     
     <top-level-block class="abs-object" 
       v-for="(stmt, index) in data.statements" 
@@ -25,7 +25,7 @@
       bag="vue-blocks-statements" 
       :component="statementComponent(stmt.statement)"
       :data="stmt.statement"
-      @input="onDraggedOut(data.statements, index)" />
+      @input="dragdrop(data.statements, index, 'statement', $event)" />
   </div>
 </template>
 
@@ -62,9 +62,12 @@ export default {
     statementComponent: function(statement) {
       return Statement.statements[statement._name];
     },
-    onDraggedOut: function(container, index) {
-      console.log('onDraggedOut', container, index);
-      container.splice(index, 1);
+    dragdrop: function(container, index, key, value) {
+      console.log('dragdrop', container, index, key, value);
+      if (!value)
+        container.splice(index, 1);
+      else
+        container[index][key] = value;
     },
 
     init() {
@@ -94,6 +97,7 @@ export default {
 
       vD.options('vue-blocks-blocks', {
         mirrorContainer: this.$refs.container,
+        removeOnSpill: true,
         moves: (el, target, source, sibling) => {
           // console.log('moves', el, target, source, sibling);
           return true;
@@ -109,33 +113,46 @@ export default {
           else
             ret = false;
 
-          console.log('block invalid', ret, el, handle);
+          // console.log('block invalid', ret, el, handle);
           return ret;
         },
       });
 
       this.blockBag = vD.getDrake('vue-blocks-blocks');
-
-      this.blockBag.on({
-        drag: ({ el, container, service, drake }) => {
-          // el.classList.remove('ex-moved');
-        },
-        drop: (e) => {
-          let { el, container } = e;
-          // el.classList.add('ex-moved');
-          // console.log('drop', e, el, container);
-        },
-        over: ({ el, container }) => {
-          // el.classList.add('ex-over');
-        },
-        out: ({ el, container }) => {
-          // el.classList.remove('ex-over');
-        },
+      this.blockBag.on('cloned', (e) => {
+        console.log('cloned', e);
+        clone = e;
       })
+      this.blockBag.on('remove', (e) => {
+        let x = clone.style.left.slice(0, -2);
+        let y = clone.style.top.slice(0, -2);
+        // x and y are 'fixed' positions, so change them to be relative to the container
+        x -= this.$refs.container.offsetLeft;
+        y -= this.$refs.container.offsetTop;
+        console.log('remove', e, clone, x, y, removed);
+        this.data.blocks.push({x, y, block: removed});
+      })
+
+      // this.blockBag.on({
+      //   drag: ({ el, container, service, drake }) => {
+      //     // el.classList.remove('ex-moved');
+      //   },
+      //   drop: (e) => {
+      //     let { el, container } = e;
+      //     // el.classList.add('ex-moved');
+      //     // console.log('drop', e, el, container);
+      //   },
+      //   over: ({ el, container }) => {
+      //     // el.classList.add('ex-over');
+      //   },
+      //   out: ({ el, container }) => {
+      //     // el.classList.remove('ex-over');
+      //   },
+      // })
 
       vD.options('vue-blocks-expressions', {
         mirrorContainer: this.$refs.container,
-        direction: 'vertical',
+        direction: 'horizontal',
         removeOnSpill: true,
         // copy: false,
         moves: (el, target, source, sibling) => {
@@ -143,10 +160,12 @@ export default {
           return true;
         },
         accepts: (el, target, source, sibling) => {
-          // console.log('accepts', el, target.children.length, target, source, sibling);
+          // console.log('accepts', el, target);
           // return target.children.length < 2;
-          return target.classList.contains('empty');
-          // return true;
+          let cl = target.classList;
+          if (cl.contains('never-accept')) return false;
+          if (cl.contains('only-one')) return cl.contains('empty');
+          return true;
         },
         invalid: (el, handle) => {
           // console.log('invalid', el, handle);
@@ -179,7 +198,7 @@ export default {
         // console.log('out', e);
       })
       this.expressionBag.on('cancel', (e) => {
-        console.log('cancel', e);
+        // console.log('cancel', e);
       })
       this.expressionBag.on('dragend', (e) => {
         // console.log('dragend', e);
@@ -203,12 +222,16 @@ export default {
 
       vD.options('vue-blocks-statements', {
         mirrorContainer: this.$refs.container,
+        removeOnSpill: true,
         moves: (el, target, source, sibling) => {
           // console.log('moves', el, target, source, sibling);
           return true;
         },
         accepts: (el, target, source, sibling) => {
           // console.log('accepts', el, target, source, sibling);
+          let cl = target.classList;
+          if (cl.contains('never-accept')) return false;
+          if (cl.contains('only-one')) return cl.contains('empty');
           return true;
         },
         invalid: (el, handle) => {
@@ -220,22 +243,19 @@ export default {
       });
 
       this.statementBag = vD.getDrake('vue-blocks-statements');
-
-      // this.statementService.on({
-      //   drag: ({ el, container, service, drake }) => {
-      //     el.classList.remove('ex-moved');
-      //   },
-      //   drop: ({ el, container }) => {
-      //     el.classList.add('ex-moved');
-      //     console.log('drop', el, container);
-      //   },
-      //   over: ({ el, container }) => {
-      //     el.classList.add('ex-over');
-      //   },
-      //   out: ({ el, container }) => {
-      //     el.classList.remove('ex-over');
-      //   },
-      // })
+      this.statementBag.on('cloned', (e) => {
+        console.log('cloned', e);
+        clone = e;
+      })
+      this.statementBag.on('remove', (e) => {
+        let x = clone.style.left.slice(0, -2);
+        let y = clone.style.top.slice(0, -2);
+        // x and y are 'fixed' positions, so change them to be relative to the container
+        x -= this.$refs.container.offsetLeft;
+        y -= this.$refs.container.offsetTop;
+        console.log('remove', e, clone, x, y, removed);
+        this.data.statements.push({x, y, statement: removed});
+      })
     },
   },
 };
@@ -249,7 +269,7 @@ export default {
 }
 
 .blockscontainer .gu-mirror {
-  display: table;
+  /*display: table;*/
   box-sizing: border-box;
 }
 

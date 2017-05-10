@@ -1,7 +1,7 @@
 <template>
   <!-- <div>
     {{dragArray}} -->
-  <div class="expression-hole"
+  <div class="expression-hole only-one"
     :class="{empty: dragArray.length === 0}"
     v-dragula="dragArray" 
     bag="vue-blocks-expressions"

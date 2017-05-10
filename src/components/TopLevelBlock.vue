@@ -1,7 +1,9 @@
 <template>
-  <div class="toplevelblock"
+  <div class="toplevelblock never-accept"
+    :class="{disappear: disappear}"
     v-dragula="dragArray" 
     :bag="bag"
+    @dg-drag="drag"
     @dragdrop="dragdrop($event)"
   >
     <component v-for="item in dragArray" 
@@ -28,6 +30,7 @@ export default {
     }
     return {
       dragArray,
+      disappear: false,
     };
   },
   // watch: {
@@ -37,9 +40,14 @@ export default {
   //   },
   // },
   methods: {
+    drag($event) {
+      // console.log('DRAG!', $event);
+      this.disappear = true;
+    },
     dragdrop(event) {
-      this.dragArray = event.model;
-      if (event.removed) this.$emit('input', event.model[0]);
+      // console.log('TLB dragdrop', event);
+      // this.dragArray = event.model;
+      this.$emit('input', event.model[0]);
     }
   }
 };
@@ -47,5 +55,7 @@ export default {
 
 <!-- Add "scoped" attribute to limit CSS to this component only -->
 <style>
-
+.disappear {
+  display: none;
+}
 </style>
