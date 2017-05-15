@@ -31,6 +31,7 @@ export default {
   border-left: 10px solid #8888ff;
   border-right: none;
   border-top: none;
+  /*z-index: 1;*/
 }
 /*.statement:after {
   border-bottom: 10px solid #8888ff;
@@ -101,7 +102,7 @@ export default {
   display: flex;
 }
 
-.statement/* > .block-row > .block-right-hole > .statements-hole {
+/*.statement > .block-row > .block-right-hole > .statements-hole {
   border-top: 5px solid #8888ff;
   border-bottom: 5px solid #8888ff;
 }*/
@@ -145,7 +146,7 @@ export default {
 
 .statement:before {
   bottom: 100%;
-  left: 18px;
+  left: 8px;
   border: solid transparent;
   content: " ";
   height: 0;
@@ -161,7 +162,7 @@ export default {
 }
 .statement:after {
   top: 100%;
-  left: 18px;
+  left: 8px;
   border: solid transparent;
   content: " ";
   height: 0;
@@ -173,7 +174,7 @@ export default {
   border-width: 5px;
   margin-left: -5px;
   /*margin-top: -10px;*/
-  z-index: 1;
+  z-index: 2;
 }
 
 

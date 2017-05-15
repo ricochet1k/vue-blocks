@@ -18,10 +18,9 @@
 </template>
 
 <script>
-import Vue from 'vue';
 // import { DragHandler } from 'vue2-dragula';
-import BlockMixin from '../components/BlockMixin';
-import { expressions } from '../components/Expression';
+import BlockMixin from './BlockMixin';
+import { expressions } from './Expression';
 
 // class MyDragHandler extends DragHandler {
 

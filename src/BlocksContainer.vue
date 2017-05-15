@@ -30,15 +30,13 @@
 </template>
 
 <script>
-import Vue from 'vue';
-
-import Block from '../components/Block';
-import BlockMixin from '../components/BlockMixin';
-import Expression from '../components/Expression';
-import Statement from '../components/Statement';
-import StatementsHole from '../components/StatementsHole';
-import ExpressionHole from '../components/ExpressionHole';
-import TopLevelBlock from '../components/TopLevelBlock';
+import Block from './Block';
+import BlockMixin from './BlockMixin';
+import Expression from './Expression';
+import Statement from './Statement';
+import StatementsHole from './StatementsHole';
+import ExpressionHole from './ExpressionHole';
+import TopLevelBlock from './TopLevelBlock';
 
 export default {
   name: 'blockscontainer',
@@ -63,7 +61,7 @@ export default {
       return Statement.statements[statement._name];
     },
     dragdrop: function(container, index, key, value) {
-      console.log('dragdrop', container, index, key, value);
+      // console.log('dragdrop', container, index, key, value);
       if (!value)
         container.splice(index, 1);
       else
@@ -71,7 +69,7 @@ export default {
     },
 
     init() {
-      console.log('vueDragula', Vue.dragula);
+      console.log('vueDragula', this.$dragula);
       let vD = this.$dragula;
 
       let clone;
@@ -82,14 +80,14 @@ export default {
 
       this.$dragula.eventBus.$on('drop-model',
         (bagName, el, dropTarget, dropSource, dropIndex) => {
-          console.log('dropModel: ', bagName, el, dropTarget, dropSource, dropIndex)
+          // console.log('dropModel: ', bagName, el, dropTarget, dropSource, dropIndex)
           // this.updateModel(dropTarget, dropSource)
         }
       )
 
       this.$dragula.eventBus.$on('remove-model',
         (bagName, el, removeSource, removeIndex) => {
-          console.log('removeModel: ', bagName, el, removeSource, removeIndex)
+          // console.log('removeModel: ', bagName, el, removeSource, removeIndex)
           // this.updateModel(dropTarget, dropSource)
           removed = removeSource.removed;
         }
@@ -120,7 +118,7 @@ export default {
 
       this.blockBag = vD.getDrake('vue-blocks-blocks');
       this.blockBag.on('cloned', (e) => {
-        console.log('cloned', e);
+        // console.log('cloned', e);
         clone = e;
       })
       this.blockBag.on('remove', (e) => {
@@ -129,7 +127,7 @@ export default {
         // x and y are 'fixed' positions, so change them to be relative to the container
         x -= this.$refs.container.offsetLeft;
         y -= this.$refs.container.offsetTop;
-        console.log('remove', e, clone, x, y, removed);
+        // console.log('remove', e, clone, x, y, removed);
         this.data.blocks.push({x, y, block: removed});
       })
 
@@ -152,7 +150,7 @@ export default {
 
       vD.options('vue-blocks-expressions', {
         mirrorContainer: this.$refs.container,
-        direction: 'horizontal',
+        // direction: 'horizontal',
         removeOnSpill: true,
         // copy: false,
         moves: (el, target, source, sibling) => {
@@ -207,7 +205,7 @@ export default {
         // console.log('shadow', arguments);
       })
       this.expressionBag.on('cloned', (e) => {
-        console.log('cloned', e);
+        // console.log('cloned', e);
         clone = e;
       })
       this.expressionBag.on('remove', (e) => {
@@ -216,7 +214,7 @@ export default {
         // x and y are 'fixed' positions, so change them to be relative to the container
         x -= this.$refs.container.offsetLeft;
         y -= this.$refs.container.offsetTop;
-        console.log('remove', e, clone, x, y, removed);
+        // console.log('remove', e, clone, x, y, removed);
         this.data.expressions.push({x, y, expression: removed});
       })
 
@@ -244,7 +242,7 @@ export default {
 
       this.statementBag = vD.getDrake('vue-blocks-statements');
       this.statementBag.on('cloned', (e) => {
-        console.log('cloned', e);
+        // console.log('cloned', e);
         clone = e;
       })
       this.statementBag.on('remove', (e) => {
@@ -253,7 +251,7 @@ export default {
         // x and y are 'fixed' positions, so change them to be relative to the container
         x -= this.$refs.container.offsetLeft;
         y -= this.$refs.container.offsetTop;
-        console.log('remove', e, clone, x, y, removed);
+        // console.log('remove', e, clone, x, y, removed);
         this.data.statements.push({x, y, statement: removed});
       })
     },
@@ -265,7 +263,7 @@ export default {
 <style>
 .blockscontainer {
   position: relative;
-  background-color: gray;
+  background-color: #eeeeee;
 }
 
 .blockscontainer .gu-mirror {
@@ -288,4 +286,29 @@ export default {
 .abs-object {
   position: absolute;
 }
+.gu-mirror {
+  position: fixed !important;
+  margin: 0 !important;
+  z-index: 9999 !important;
+  opacity: 0.8;
+  -ms-filter: "progid:DXImageTransform.Microsoft.Alpha(Opacity=80)";
+  filter: alpha(opacity=80);
+}
+.gu-hide {
+  /*display: none !important;*/
+  visibility: hidden;
+}
+.gu-unselectable {
+  -webkit-user-select: none !important;
+  -moz-user-select: none !important;
+  -ms-user-select: none !important;
+  user-select: none !important;
+}
+.gu-transit {
+  opacity: 0.2;
+  -ms-filter: "progid:DXImageTransform.Microsoft.Alpha(Opacity=20)";
+  filter: alpha(opacity=20);
+}
+
+
 </style>

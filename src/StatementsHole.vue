@@ -2,7 +2,7 @@
   <div class="statements-hole">
     <div class="top-border"></div>
     <div class="stmts-list"
-    v-dragula="value" 
+    v-dragula="safeValue" 
     bag="vue-blocks-statements"
     @dragdrop="dragdrop($event)">
       <component v-for="stmt in value" 
@@ -16,12 +16,11 @@
 </template>
 
 <script>
-import Vue from 'vue';
-import BlockMixin from '../components/BlockMixin';
-import { statements } from '../components/Statement';
+import BlockMixin from './BlockMixin';
+import { statements } from './Statement';
 
 export default {
-  name: 'expression-hole',
+  name: 'statements-hole',
   mixins: [BlockMixin],
   props: ['value'],
   data() {
@@ -30,7 +29,7 @@ export default {
   },
   methods: {
     dragdrop(event) {
-      console.log('stmt DRAGDROP', event);
+      // console.log('stmt DRAGDROP', event);
       this.$emit('input', event.model);
     },
     statementComponent(stmt) {
@@ -40,6 +39,12 @@ export default {
       return statements[stmt._name];
     },
   },
+  computed: {
+    safeValue() {
+      // console.log('safeValue a', this.value);
+      return this.value || [];
+    }
+  }
 };
 </script>
 
@@ -77,7 +82,7 @@ export default {
   z-index: 1;
 }*/
 
-.statements-hole:before {
+.statements-hole > .top-border:after {
   bottom: 100%;
   left: 20px;
   border: solid transparent;
@@ -107,7 +112,7 @@ export default {
   border-width: 5px;
   margin-left: -5px;
   margin-top: -6px;
-  z-index: 1;
+  /*z-index: 0;*/
 }
 
 /*

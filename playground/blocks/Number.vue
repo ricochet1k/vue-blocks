@@ -5,7 +5,7 @@
 </template>
 
 <script>
-import Expression from '../components/Expression';
+import {Expression} from 'src';
 
 export default {
   name: 'number',

@@ -20,9 +20,7 @@
 </template>
 
 <script>
-import Statement from '../components/Statement';
-import ExpressionHole from '../components/ExpressionHole';
-import StatementsHole from '../components/StatementsHole';
+import {Statement, ExpressionHole, StatementsHole} from 'src';
 
 export default {
   name: 'ifthen',

@@ -9,8 +9,7 @@
 </template>
 
 <script>
-import Statement from '../components/Statement';
-import ExpressionHole from '../components/ExpressionHole';
+import {Statement, ExpressionHole} from 'src';
 
 export default {
   name: 'turnleft',

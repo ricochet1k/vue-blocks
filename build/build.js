@@ -9,7 +9,8 @@ var chalk = require('chalk')
 var shell = require('shelljs')
 var webpack = require('webpack')
 var config = require('../config')
-var webpackConfig = require('./webpack.prod.conf')
+var webpackMinConfig = require('./webpack.min.conf')
+var webpackUnMinConfig = require('./webpack.unmin.conf')
 
 var spinner = ora('building for production...')
 spinner.start()
@@ -21,8 +22,7 @@ shell.config.silent = true
 shell.cp('-R', 'static/*', assetsPath)
 shell.config.silent = false
 
-webpack(webpackConfig, function (err, stats) {
-  spinner.stop()
+webpack(webpackUnMinConfig, function (err, stats) {
   if (err) throw err
   process.stdout.write(stats.toString({
     colors: true,
@@ -32,9 +32,17 @@ webpack(webpackConfig, function (err, stats) {
     chunkModules: false
   }) + '\n\n')
 
-  console.log(chalk.cyan('  Build complete.\n'))
-  console.log(chalk.yellow(
-    '  Tip: built files are meant to be served over an HTTP server.\n' +
-    '  Opening index.html over file:// won\'t work.\n'
-  ))
+  webpack(webpackMinConfig, function (err2, stats2) {
+    spinner.stop()
+    if (err2) throw err2
+    process.stdout.write(stats2.toString({
+      colors: true,
+      modules: false,
+      children: false,
+      chunks: false,
+      chunkModules: false
+    }) + '\n\n')
+
+    console.log(chalk.cyan('  Build complete.\n'))
+  })
 })

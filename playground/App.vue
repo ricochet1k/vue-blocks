@@ -9,12 +9,21 @@
 </template>
 
 <script>
-import BlocksContainer from './components/BlocksContainer';
-import Block from './components/Block';
-import Expression from './components/Expression';
-import ExpressionHole from './components/ExpressionHole';
-import Statement from './components/Statement';
-import StatementsHole from './components/StatementsHole';
+import {
+  BlocksContainer,
+  Block,
+  Expression,
+  ExpressionHole,
+  Statement,
+  StatementsHole,
+} from 'src';
+
+// import BlocksContainer from './components/BlocksContainer';
+// import Block from './components/Block';
+// import Expression from './components/Expression';
+// import ExpressionHole from './components/ExpressionHole';
+// import Statement from './components/Statement';
+// import StatementsHole from './components/StatementsHole';
 import TestBlock from './blocks/TestBlock';
 import Number from './blocks/Number';
 import Square from './blocks/Square';
@@ -116,8 +125,6 @@ export default {
   },
   components: {
     BlocksContainer,
-    TestBlock,
-    Number,
   },
 };
 </script>
@@ -130,28 +137,5 @@ export default {
 }
 
 
-.gu-mirror {
-  position: fixed !important;
-  margin: 0 !important;
-  z-index: 9999 !important;
-  opacity: 0.8;
-  -ms-filter: "progid:DXImageTransform.Microsoft.Alpha(Opacity=80)";
-  filter: alpha(opacity=80);
-}
-.gu-hide {
-  /*display: none !important;*/
-  visibility: hidden;
-}
-.gu-unselectable {
-  -webkit-user-select: none !important;
-  -moz-user-select: none !important;
-  -ms-user-select: none !important;
-  user-select: none !important;
-}
-.gu-transit {
-  opacity: 0.2;
-  -ms-filter: "progid:DXImageTransform.Microsoft.Alpha(Opacity=20)";
-  filter: alpha(opacity=20);
-}
 
 </style>

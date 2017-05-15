@@ -1,14 +1,16 @@
 <template>
   <expression>
-    <span :style="{'background-color': 'green', width: '50px', height: '50px'}"></span>
+    <expression-hole v-model="data.left" />
+    <span>&lt;</span>
+    <expression-hole v-model="data.right" />
   </expression>
 </template>
 
 <script>
-import Expression from '../components/Expression';
+import {Expression, ExpressionHole} from 'src';
 
 export default {
-  name: 'square',
+  name: 'lessthan',
   props: ['data'],
   data() {
     return {
@@ -16,6 +18,7 @@ export default {
   },
   components: {
     Expression,
+    ExpressionHole,
   },
 };
 </script>

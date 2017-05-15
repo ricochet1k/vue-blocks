@@ -4,6 +4,7 @@
   "description": "Blockly-like drag-and-drop programming using Vue",
   "author": "Matt Peterson <ricochet1k@gmail.com>",
   "private": true,
+  "main": "dist/vue-blocks.js",
   "scripts": {
     "dev": "node build/dev-server.js",
     "build": "node build/build.js",

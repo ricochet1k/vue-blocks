@@ -15,9 +15,8 @@
 </template>
 
 <script>
-import Vue from 'vue';
-import BlockMixin from '../components/BlockMixin';
-import { expressions } from '../components/Expression';
+import BlockMixin from './BlockMixin';
+import { expressions } from './Expression';
 
 export default {
   name: 'top-level-block',
@@ -58,4 +57,6 @@ export default {
 .disappear {
   display: none;
 }
+
+
 </style>
