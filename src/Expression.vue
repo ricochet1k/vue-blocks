@@ -1,5 +1,5 @@
 <template>
-  <div class="expression">
+  <div class="expression" :data-type="type">
     <slot />
   </div>
 </template>
@@ -9,6 +9,7 @@
 
 export default {
   name: 'expression',
+  props: ['type'],
   data() {
     return {
     };
@@ -33,6 +34,8 @@ export default {
   display: inline-flex;
   align-items: center;
   border-radius: 2px;
+
+  clip-path: border-box polygon(0% 0%, 100% 0%, 100% 100%, 0% 100%, 0% calc(50% + 10px), 10px 50%, 0 calc(50% - 10px));
 }
 
 .expression > * {
@@ -67,7 +70,7 @@ export default {
   vertical-align: inherit;
 }
 
-.expression::before {
+/*.expression::before {
   right: 100%;
   top: 50%;
   border: solid transparent;
@@ -82,5 +85,5 @@ export default {
   margin-top: -10px;
   margin-right: -20px;
   z-index: 1;
-}
+}*/
 </style>

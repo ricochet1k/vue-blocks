@@ -7,6 +7,7 @@
 <script>
 export default {
   name: 'statement',
+	props: ['type'],
   data() {
     return {
     };
@@ -32,6 +33,8 @@ export default {
   border-right: none;
   border-top: none;
   /*z-index: 1;*/
+
+  clip-path: border-box polygon(0% 0%, 13px 0, 18px 5px, 23px 0, 100% 0%, 100% 120%, 0% 120%);
 }
 /*.statement:after {
   border-bottom: 10px solid #8888ff;
@@ -144,7 +147,7 @@ export default {
 }
 
 
-.statement:before {
+/*.statement:before {
   bottom: 100%;
   left: 8px;
   border: solid transparent;
@@ -153,28 +156,24 @@ export default {
   width: 0;
   position: absolute;
   pointer-events: none;
-  /*border-color: rgba(136, 183, 213, 0);*/
   border-top-color: white;
   border-width: 5px;
   margin-left: -5px;
   margin-bottom: -9.8px;
   z-index: 1;
-}
+}*/
 .statement:after {
   top: 100%;
-  left: 8px;
+  left: 18px;
   border: solid transparent;
   content: " ";
   height: 0;
   width: 0;
   position: absolute;
   pointer-events: none;
-  /*border-color: rgba(194, 225, 245, 0);*/
   border-top-color: #8888ff;
   border-width: 5px;
   margin-left: -5px;
-  /*margin-top: -10px;*/
-  z-index: 2;
 }
 
 

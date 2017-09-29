@@ -26,6 +26,7 @@ import {
 // import StatementsHole from './components/StatementsHole';
 import TestBlock from './blocks/TestBlock';
 import Number from './blocks/Number';
+import String from './blocks/String';
 import Square from './blocks/Square';
 import LessThan from './blocks/LessThan';
 import LengthOf from './blocks/LengthOf';
@@ -36,6 +37,7 @@ import {renderCode} from './format';
 
 Block.registerBlock(TestBlock);
 Expression.registerExpression(Number);
+Expression.registerExpression(String);
 Expression.registerExpression(Square);
 Expression.registerExpression(LessThan);
 Expression.registerExpression(LengthOf);
@@ -61,7 +63,7 @@ export default {
               two: {
                 _name: 'lengthof',
                 value: {
-                  _name: 'number',
+                  _name: 'string',
                   value: 'name',
                 },
               },

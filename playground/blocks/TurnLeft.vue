@@ -2,7 +2,7 @@
   <statement>
     <div class="block-text-inline">
       <span>turn left by</span>
-      <expression-hole v-model="data.value" />
+      <expression-hole type="number" v-model="data.value" />
       <span>degrees</span>
     </div>
   </statement>

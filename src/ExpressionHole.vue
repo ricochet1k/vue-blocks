@@ -3,6 +3,7 @@
     {{dragArray}} -->
   <div class="expression-hole only-one"
     :class="{empty: dragArray.length === 0}"
+		:data-type="type"
     v-dragula="dragArray" 
     bag="vue-blocks-expressions"
     @dragdrop="dragdrop($event)"
@@ -33,7 +34,7 @@ import { expressions } from './Expression';
 export default {
   name: 'expression-hole',
   mixins: [BlockMixin],
-  props: ['value'],
+  props: ['value', 'type'],
   data() {
     let dragArray = [];
     if (this.value) {
@@ -45,12 +46,12 @@ export default {
   },
   watch: {
     dragArray: function(da) {
-      console.log("watch dragArray", arguments)
+      //console.log("watch dragArray", arguments)
       if (da[0] !== this.value)
         this.$emit('input', da[0]);
     },
     value: function(val) {
-      console.log("watch value", arguments)
+      //console.log("watch value", arguments)
       if (val !== this.dragArray[0]) {
         let dragArray = [];
         if (val) {
@@ -62,7 +63,7 @@ export default {
   },
   methods: {
     dragdrop(event) {
-      console.log('DRAGDROP!', event);
+      //console.log('DRAGDROP!', event);
       this.$emit('input', event.model[0]);
     },
     expressionComponent(item) {
@@ -129,7 +130,6 @@ export default {
   border-width: 9px;
   margin-top: -9px;
   margin-right: -17.5px;
-  z-index: 2;
 }
 
 .block-text-inline.right-hole > .expression-hole:last-child {

@@ -1,5 +1,5 @@
 <template>
-  <expression>
+  <expression type="shape">
     <span :style="{'background-color': 'green', width: '50px', height: '50px'}"></span>
   </expression>
 </template>

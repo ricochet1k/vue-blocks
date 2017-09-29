@@ -1,7 +1,7 @@
 <template>
-  <expression class="right-hole">
+  <expression class="right-hole" type="number">
     <span>length of</span>
-    <expression-hole v-model="data.value" />
+    <expression-hole type="string" v-model="data.value" />
   </expression>
 </template>
 

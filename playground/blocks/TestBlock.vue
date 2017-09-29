@@ -7,7 +7,7 @@
     </div>
     <div class="block-text-inline right-hole">
       <span>only if this was really a lot longer</span>
-      <expression-hole v-model="data.two" />
+      <expression-hole v-model="data.two" type="number" />
     </div>
     <div class="block-text-inline">
       <span>turn right by</span>

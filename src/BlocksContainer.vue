@@ -158,7 +158,13 @@ export default {
           return true;
         },
         accepts: (el, target, source, sibling) => {
-          // console.log('accepts', el, target);
+          console.log('accepts', el, target, source);
+	  let targetType = target.dataset.type;
+	  let sourceType = el.dataset.type;
+	  console.log('accepts vue', target.__vue__, source.__vue__);
+	  console.log('accepts type', targetType, sourceType);
+	  if (targetType && sourceType && targetType != sourceType)
+	    return false;
           // return target.children.length < 2;
           let cl = target.classList;
           if (cl.contains('never-accept')) return false;

@@ -37,6 +37,7 @@ const renderFns = (()=>{
   return {
     // expressions
     'number': ({value}) => f`${value}`,
+    'string': ({value}) => f`${value}`,
     'lengthof': ({value}) => f`${value}.length`,
     'lessthan': ({left, right}) => f`${left} < ${right}`,
 

@@ -22,7 +22,7 @@ import { statements } from './Statement';
 export default {
   name: 'statements-hole',
   mixins: [BlockMixin],
-  props: ['value'],
+  props: ['value', 'type'],
   data() {
     return {
     };
@@ -57,6 +57,7 @@ export default {
   display: inline-block;
   /*background-color: white;*/
   /*vertical-align: -100%;*/ /* why does this work?? */
+
 }
 .statements-hole > .stmts-list {
   position: relative;
@@ -98,7 +99,7 @@ export default {
   margin-bottom: -13.5px;
   z-index: 2;
 }
-.statements-hole::after {
+/*.statements-hole::after {
   top: 100%;
   left: 20px;
   border: solid transparent;
@@ -107,13 +108,11 @@ export default {
   width: 0;
   position: absolute;
   pointer-events: none;
-  /*border-color: rgba(194, 225, 245, 0);*/
   border-top-color: white;
   border-width: 5px;
   margin-left: -5px;
   margin-top: -6px;
-  /*z-index: 0;*/
-}
+}*/
 
 /*
 .statements-hole::before {
@@ -137,6 +136,8 @@ export default {
   width: 26px;
   height: 6px;
   background-color: #8888ff;
+	
+  clip-path: border-box polygon(0% 0%, 15px 0, 20px 5px, 25px 0, 100% 0%, 100% 120%, 0% 120%);
 }
 
 .statements-hole > .stmts-list > .statement {

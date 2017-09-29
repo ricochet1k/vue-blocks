@@ -1,5 +1,5 @@
 <template>
-  <expression type="number">
+  <expression type="string">
     <span>{{data.value}}</span>
   </expression>
 </template>
@@ -8,7 +8,7 @@
 import {Expression} from 'src';
 
 export default {
-  name: 'number',
+  name: 'string',
   props: ['data'],
   data() {
     return {
