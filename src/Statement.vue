@@ -7,7 +7,7 @@
 <script>
 export default {
   name: 'statement',
-	props: ['type'],
+  props: ['type'],
   data() {
     return {
     };
@@ -34,7 +34,8 @@ export default {
   border-top: none;
   /*z-index: 1;*/
 
-  clip-path: border-box polygon(0% 0%, 13px 0, 18px 5px, 23px 0, 100% 0%, 100% 120%, 0% 120%);
+  clip-path: polygon(0% 0%, 13px 0, 18px 5px, 23px 0, 100% 0%, 100% 120%, 0% 120%);
+  transform-box: fill-box;
 }
 /*.statement:after {
   border-bottom: 10px solid #8888ff;
@@ -147,33 +148,25 @@ export default {
 }
 
 
-/*.statement:before {
-  bottom: 100%;
+.statement::after {
+  top: 100%;
   left: 8px;
   border: solid transparent;
-  content: " ";
+  content: "";
   height: 0;
   width: 0;
-  position: absolute;
-  pointer-events: none;
-  border-top-color: white;
-  border-width: 5px;
-  margin-left: -5px;
-  margin-bottom: -9.8px;
-  z-index: 1;
-}*/
-.statement:after {
-  top: 100%;
-  left: 18px;
-  border: solid transparent;
-  content: " ";
-  height: 0;
-  width: 0;
+  display: block;
   position: absolute;
   pointer-events: none;
   border-top-color: #8888ff;
   border-width: 5px;
   margin-left: -5px;
+  transform-box: fill-box;
+}
+@-moz-document url-prefix() { 
+  .statement::after {
+    left:18px;
+  }
 }
 
 

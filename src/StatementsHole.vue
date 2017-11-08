@@ -136,8 +136,8 @@ export default {
   width: 26px;
   height: 6px;
   background-color: #8888ff;
-	
-  clip-path: border-box polygon(0% 0%, 15px 0, 20px 5px, 25px 0, 100% 0%, 100% 120%, 0% 120%);
+
+  clip-path: polygon(0% 0%, 15px 0, 20px 5px, 25px 0, 100% 0%, 100% 120%, 0% 120%);
 }
 
 .statements-hole > .stmts-list > .statement {

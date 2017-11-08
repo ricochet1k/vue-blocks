@@ -54,6 +54,10 @@ export default {
 
 <!-- Add "scoped" attribute to limit CSS to this component only -->
 <style>
+.toplevelblock {
+  filter: drop-shadow(2px 2px 1px #444444);
+}
+
 .disappear {
   display: none;
 }

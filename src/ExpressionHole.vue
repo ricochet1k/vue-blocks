@@ -143,7 +143,6 @@ export default {
   background: white;
   margin-top: 0;
   margin-bottom: 0;
-  border-radius: 0;
   padding: 0;
   padding-left: 1px;
 }

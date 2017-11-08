@@ -1,5 +1,7 @@
 <template>
-  <div class="blockscontainer" ref="container">
+  <div class="blockscontainer">
+    <div class="mirrorcontainer" ref="container"></div>
+
     <top-level-block class="abs-object" 
       v-for="(blk, index) in data.blocks" 
       :key="keyFor(blk)"
@@ -37,6 +39,28 @@ import Statement from './Statement';
 import StatementsHole from './StatementsHole';
 import ExpressionHole from './ExpressionHole';
 import TopLevelBlock from './TopLevelBlock';
+
+function getFixedPosition(el) {
+  var x = 0;
+  var y = 0;
+
+  while (el) {
+    var scrollLeft = el.scrollLeft;
+    var scrollTop = el.scrollTop;
+
+    if (el.tagName == "BODY") {
+      scrollLeft = scrollLeft || document.documentElement.scrollLeft;
+      scrollTop = scrollTop || document.documentElement.scrollTop;
+    }
+
+    x += el.offsetLeft - scrollLeft + el.clientLeft;
+    y += el.offsetTop - scrollTop + el.clientTop;
+
+    el = el.offsetParent;
+  }
+
+  return {x, y};
+}
 
 export default {
   name: 'blockscontainer',
@@ -125,8 +149,9 @@ export default {
         let x = clone.style.left.slice(0, -2);
         let y = clone.style.top.slice(0, -2);
         // x and y are 'fixed' positions, so change them to be relative to the container
-        x -= this.$refs.container.offsetLeft;
-        y -= this.$refs.container.offsetTop;
+        let pos = getFixedPosition(this.$refs.container);
+        x -= pos.x;
+        y -= pos.y;
         // console.log('remove', e, clone, x, y, removed);
         this.data.blocks.push({x, y, block: removed});
       })
@@ -159,12 +184,12 @@ export default {
         },
         accepts: (el, target, source, sibling) => {
           console.log('accepts', el, target, source);
-	  let targetType = target.dataset.type;
-	  let sourceType = el.dataset.type;
-	  console.log('accepts vue', target.__vue__, source.__vue__);
-	  console.log('accepts type', targetType, sourceType);
-	  if (targetType && sourceType && targetType != sourceType)
-	    return false;
+          let targetType = target.dataset.type;
+          let sourceType = el.dataset.type;
+          console.log('accepts vue', target.__vue__, source.__vue__);
+          console.log('accepts type', targetType, sourceType);
+          if (targetType && sourceType && targetType != sourceType)
+            return false;
           // return target.children.length < 2;
           let cl = target.classList;
           if (cl.contains('never-accept')) return false;
@@ -218,8 +243,10 @@ export default {
         let x = clone.style.left.slice(0, -2);
         let y = clone.style.top.slice(0, -2);
         // x and y are 'fixed' positions, so change them to be relative to the container
-        x -= this.$refs.container.offsetLeft;
-        y -= this.$refs.container.offsetTop;
+        let pos = getFixedPosition(this.$refs.container);
+        console.log('remove', x, y, pos);
+        x -= pos.x;
+        y -= pos.y;
         // console.log('remove', e, clone, x, y, removed);
         this.data.expressions.push({x, y, expression: removed});
       })
@@ -255,8 +282,9 @@ export default {
         let x = clone.style.left.slice(0, -2);
         let y = clone.style.top.slice(0, -2);
         // x and y are 'fixed' positions, so change them to be relative to the container
-        x -= this.$refs.container.offsetLeft;
-        y -= this.$refs.container.offsetTop;
+        let pos = getFixedPosition(this.$refs.container);
+        x -= pos.x;
+        y -= pos.y;
         // console.log('remove', e, clone, x, y, removed);
         this.data.statements.push({x, y, statement: removed});
       })
@@ -267,6 +295,14 @@ export default {
 
 <!-- Add "scoped" attribute to limit CSS to this component only -->
 <style>
+.mirrorcontainer {
+  filter: drop-shadow(3px 3px 3px #444444);
+  z-index: 10;
+  position: relative;
+  top: 0;
+  left: 0;
+}
+
 .blockscontainer {
   position: relative;
   background-color: #eeeeee;
@@ -296,9 +332,9 @@ export default {
   position: fixed !important;
   margin: 0 !important;
   z-index: 9999 !important;
-  opacity: 0.8;
+  /*opacity: 0.8;
   -ms-filter: "progid:DXImageTransform.Microsoft.Alpha(Opacity=80)";
-  filter: alpha(opacity=80);
+  filter: alpha(opacity=80);*/
 }
 .gu-hide {
   /*display: none !important;*/
