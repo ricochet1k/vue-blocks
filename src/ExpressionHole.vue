@@ -77,6 +77,7 @@ export default {
 .expression-hole:empty, .expression-hole.dragging {
   min-height: 1em;
   min-width: 20px;
+  box-shadow: inset 1px 1px 1px #444444;
 }
 
 .expression-hole > :nth-child(2) {
@@ -93,6 +94,7 @@ export default {
   /*vertical-align: middle;*/
   border-radius: 2px;
   margin: 1px 0;
+  overflow: hidden;
 }
 
 .block-text-inline > .expression-hole::before {
@@ -126,6 +128,9 @@ export default {
   border-width: 9px;
   margin-top: -9px;
   margin-right: -17.5px;
+}
+.expression-hole.empty::before, .expression-hole.dragging::before {
+  filter: drop-shadow(1px 1px 1px #444444);
 }
 
 .block-text-inline.right-hole > .expression-hole:last-child {

@@ -47,6 +47,8 @@ export default {
 <style>
 .toplevelblock {
   filter: drop-shadow(2px 2px 1px #444444);
+  width: max-content;
+  width: -moz-max-content;
 }
 
 .disappear {

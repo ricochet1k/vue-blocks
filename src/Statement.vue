@@ -31,9 +31,9 @@ export default {
   border-left: 10px solid #8888ff;
   border-right: none;
   border-top: none;
+  width: max-content;
 
   clip-path: polygon(0% 0%, 13px 0, 18px 5px, 23px 0, 100% 0%, 100% 120%, 0% 120%);
-  transform-box: fill-box;
 }
 
 .statement > .block-text-inline > * {
@@ -79,6 +79,7 @@ export default {
   padding-right: 10px;
   display: flex;
   position: relative;
+  width: max-content;
 }
 
 .statement > .block-row > .block-left {
@@ -145,11 +146,11 @@ export default {
   margin-left: -5px;
   transform-box: fill-box;
 }
-@-moz-document url-prefix() {
+/*@-moz-document url-prefix() {
   .statement::after {
     left:18px;
   }
-}
+}*/
 
 
 </style>

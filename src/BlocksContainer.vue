@@ -1,6 +1,8 @@
 <template>
   <div class="blockscontainer">
-    <div class="mirrorcontainer" ref="container"></div>
+    <div class="mirrorcontainer" ref="container">
+      <div></div>
+    </div>
 
     <top-level-block class="abs-object"
       v-for="(blk, index) in data.blocks"
@@ -101,6 +103,22 @@ export default {
 
       console.log('init', this.$refs.container);
 
+      function cloned(e) {
+        clone = e;
+      }
+
+      var removedPosition = () => {
+        let x = clone.style.left.slice(0, -2);
+        let y = clone.style.top.slice(0, -2);
+        // x and y are 'fixed' positions, so change them to be relative to the container
+        //let pos = getFixedPosition(this.$refs.container);
+        let pos = this.$refs.container.getBoundingClientRect();
+        console.log('removedPosition:', x, y, pos);
+        x -= pos.x;
+        y -= pos.y;
+        return {x, y};
+      }
+
 
       this.$dragula.eventBus.$on('drop-model',
         (bagName, el, dropTarget, dropSource, dropIndex) => {
@@ -137,16 +155,9 @@ export default {
       });
 
       this.blockBag = vD.getDrake('vue-blocks-blocks');
-      this.blockBag.on('cloned', (e) => {
-        clone = e;
-      })
+      this.blockBag.on('cloned', cloned);
       this.blockBag.on('remove', (e) => {
-        let x = clone.style.left.slice(0, -2);
-        let y = clone.style.top.slice(0, -2);
-        // x and y are 'fixed' positions, so change them to be relative to the container
-        let pos = getFixedPosition(this.$refs.container);
-        x -= pos.x;
-        y -= pos.y;
+        let {x, y} = removedPosition();
         this.data.blocks.push({x, y, block: removed});
       })
 
@@ -174,35 +185,9 @@ export default {
 
       this.expressionBag = vD.getDrake('vue-blocks-expressions');
 
-      this.expressionBag.on('drag', (e) => {
-        let { el, container, service, drake } = e;
-      })
-      this.expressionBag.on('drop', (e) => {
-        let { el, container } = e;
-      })
-      this.expressionBag.on('over', (e) => {
-        let { el, container } = e;
-      })
-      this.expressionBag.on('out', (e) => {
-        let { el, container } = e;
-      })
-      this.expressionBag.on('cancel', (e) => {
-      })
-      this.expressionBag.on('dragend', (e) => {
-      })
-      this.expressionBag.on('shadow', function (e) {
-      })
-      this.expressionBag.on('cloned', (e) => {
-        clone = e;
-      })
+      this.expressionBag.on('cloned', cloned);
       this.expressionBag.on('remove', (e) => {
-        let x = clone.style.left.slice(0, -2);
-        let y = clone.style.top.slice(0, -2);
-        // x and y are 'fixed' positions, so change them to be relative to the container
-        let pos = getFixedPosition(this.$refs.container);
-        console.log('remove', x, y, pos);
-        x -= pos.x;
-        y -= pos.y;
+        let {x, y} = removedPosition();
         this.data.expressions.push({x, y, expression: removed});
       })
 
@@ -226,16 +211,9 @@ export default {
       });
 
       this.statementBag = vD.getDrake('vue-blocks-statements');
-      this.statementBag.on('cloned', (e) => {
-        clone = e;
-      })
+      this.statementBag.on('cloned', cloned);
       this.statementBag.on('remove', (e) => {
-        let x = clone.style.left.slice(0, -2);
-        let y = clone.style.top.slice(0, -2);
-        // x and y are 'fixed' positions, so change them to be relative to the container
-        let pos = getFixedPosition(this.$refs.container);
-        x -= pos.x;
-        y -= pos.y;
+        let {x, y} = removedPosition();
         this.data.statements.push({x, y, statement: removed});
       })
     },
