@@ -32,20 +32,11 @@ export default {
       disappear: false,
     };
   },
-  // watch: {
-  //   dragArray: function(da) {
-  //     console.log("watch dragArray", arguments)
-  //     this.$emit('input', da[0]);
-  //   },
-  // },
   methods: {
     drag($event) {
-      // console.log('DRAG!', $event);
       this.disappear = true;
     },
     dragdrop(event) {
-      // console.log('TLB dragdrop', event);
-      // this.dragArray = event.model;
       this.$emit('input', event.model[0]);
     }
   }

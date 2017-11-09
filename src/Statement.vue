@@ -18,33 +18,23 @@ export default {
   statements: {},
   registerStatement(ex) {
     this.statements[ex.name] = ex;
-    // return ex;
   },
 };
 </script>
 
-<!-- Add "scoped" attribute to limit CSS to this component only -->
+
 <style>
 .statement {
   position: relative;
-  display: table;
+  display: block;
   border-radius: 4px;
   border-left: 10px solid #8888ff;
   border-right: none;
   border-top: none;
-  /*z-index: 1;*/
 
   clip-path: polygon(0% 0%, 13px 0, 18px 5px, 23px 0, 100% 0%, 100% 120%, 0% 120%);
   transform-box: fill-box;
 }
-/*.statement:after {
-  border-bottom: 10px solid #8888ff;
-  border-bottom-right-radius: 4px;
-  width: 50px;
-  height: 0px;
-  content: " ";
-  display: block;
-}*/
 
 .statement > .block-text-inline > * {
   margin-right: 4px;
@@ -71,18 +61,16 @@ export default {
 
 .statement > .block-row:first-child > .block-left {
   padding-top: 5px;
-  /*border-top-right-radius: 4px;*/
 }
 .statement > .block-row:last-child > .block-left {
   padding-bottom: 2px;
-  /*border-bottom-right-radius: 4px;*/
 }
 
 
 .statement > .block-text-inline {
   background-color: #8888ff;
   padding-right: 10px;
-  display: flex;
+  display: inline-flex;
   align-items: center;
   position: relative;
 }
@@ -106,11 +94,6 @@ export default {
   display: flex;
 }
 
-/*.statement > .block-row > .block-right-hole > .statements-hole {
-  border-top: 5px solid #8888ff;
-  border-bottom: 5px solid #8888ff;
-}*/
-
 .statement > .block-text-inline.right-hole {
   display: table;
   padding-right: 0;
@@ -124,7 +107,6 @@ export default {
 .statement > .block-text-inline > span {
   padding-top: 2px;
   display: table-cell;
-  /*vertical-align: text-bottom;*/
 }
 
 .statement > .block-row > .block-left > span {
@@ -163,7 +145,7 @@ export default {
   margin-left: -5px;
   transform-box: fill-box;
 }
-@-moz-document url-prefix() { 
+@-moz-document url-prefix() {
   .statement::after {
     left:18px;
   }

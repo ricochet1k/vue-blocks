@@ -46,12 +46,10 @@ export default {
   },
   watch: {
     dragArray: function(da) {
-      //console.log("watch dragArray", arguments)
       if (da[0] !== this.value)
         this.$emit('input', da[0]);
     },
     value: function(val) {
-      //console.log("watch value", arguments)
       if (val !== this.dragArray[0]) {
         let dragArray = [];
         if (val) {
@@ -63,13 +61,11 @@ export default {
   },
   methods: {
     dragdrop(event) {
-      //console.log('DRAGDROP!', event);
       this.$emit('input', event.model[0]);
     },
     expressionComponent(item) {
       if (!item) return null;
 
-      // console.log('expressionComponent: ', this.value._name, this.value);
       return expressions[item._name];
     },
   },

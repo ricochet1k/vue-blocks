@@ -2,11 +2,11 @@
   <div class="statements-hole">
     <div class="top-border"></div>
     <div class="stmts-list"
-    v-dragula="safeValue" 
+    v-dragula="safeValue"
     bag="vue-blocks-statements"
     @dragdrop="dragdrop($event)">
-      <component v-for="stmt in value" 
-        :is="statementComponent(stmt)" 
+      <component v-for="stmt in value"
+        :is="statementComponent(stmt)"
         :data="stmt"
         :key="keyFor(stmt)"
       />
@@ -35,53 +35,31 @@ export default {
     statementComponent(stmt) {
       if (!stmt) return null;
 
-      // console.log('statementComponent: ', stmt._name, stmt);
       return statements[stmt._name];
     },
   },
   computed: {
     safeValue() {
-      // console.log('safeValue a', this.value);
       return this.value || [];
     }
   }
 };
 </script>
 
-<!-- Add "scoped" attribute to limit CSS to this component only -->
+
 <style>
-
-
 .statements-hole {
   position: relative;
   display: inline-block;
-  /*background-color: white;*/
-  /*vertical-align: -100%;*/ /* why does this work?? */
-
 }
 .statements-hole > .stmts-list {
   position: relative;
   padding: 2px;
   min-height: 20px;
   min-width: 100px;
-  /*display: inline-block;*/
-  /*background-color: white;*/
   z-index: 0;
 }
 
-
-/*.block > .statements-hole:last-child::after {
-  margin-left: -2px;
-  margin-top: 2px;
-  margin-bottom: -2px;
-  border-bottom: 10px solid #8888ff;
-  border-bottom-right-radius: 4px;
-  width: 100px;
-  height: 0px;
-  content: " ";
-  display: block;
-  z-index: 1;
-}*/
 
 .statements-hole > .top-border:after {
   bottom: 100%;
@@ -99,33 +77,6 @@ export default {
   margin-bottom: -13.5px;
   z-index: 2;
 }
-/*.statements-hole::after {
-  top: 100%;
-  left: 20px;
-  border: solid transparent;
-  content: " ";
-  height: 0;
-  width: 0;
-  position: absolute;
-  pointer-events: none;
-  border-top-color: white;
-  border-width: 5px;
-  margin-left: -5px;
-  margin-top: -6px;
-}*/
-
-/*
-.statements-hole::before {
-  display: block;
-  content: " ";
-  background-color: white;
-  position: absolute;
-  height: 100%;
-  /*width: 100vw;* /
-  width: 200%;
-  z-index: -100;
-}
-*/
 
 .statements-hole > .top-border {
   width: 26px;
